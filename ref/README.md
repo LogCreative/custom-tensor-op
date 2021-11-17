@@ -57,9 +57,9 @@
 |--------|--------------|--------------------------|
 |硬件环境|CPU（vCPU数目）|&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
 ||GPU(型号，数目)||
-|软件环境|OS版本||
-||深度学习框架<br>python包名称及版本||
-||CUDA版本||
+|软件环境|OS版本|Windows 11|
+||深度学习框架<br>python包名称及版本|torch==1.10.0|
+||CUDA版本|11.5|
 ||||
 
 ### 实验结果
@@ -67,8 +67,8 @@
 |||
 |---------------|---------------------------|
 | 实现方式（Linear层为例）| &nbsp; &nbsp; &nbsp; &nbsp; 性能评测 |
-|<br/> <br/>PyTorch原有张量运算<br/> <br/>&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
-|<br/> <br/>基于Python API的定制化张量运算<br/> <br/>&nbsp;||
+|<br/> <br/>PyTorch原有张量运算<br/> <br/>&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 9905/10000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|<br/> <br/>基于Python API的定制化张量运算<br/> <br/>&nbsp;|9914/10000|
 |<br/> <br/>基于C++的定制化张量运算<br/> <br/>&nbsp;||
 ||||
 

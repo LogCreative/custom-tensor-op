@@ -40,7 +40,7 @@ from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 
 #import our c++ module
-import mylinear_cpp 
+import mylinear_cpp
 
 class myLinearFunction(torch.autograd.Function):
     # Note that both forward and backward are @staticmethods
