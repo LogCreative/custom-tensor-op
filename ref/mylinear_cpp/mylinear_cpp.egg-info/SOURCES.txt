@@ -1,0 +1,6 @@
+mylinear.cpp
+setup.py
+mylinear_cpp.egg-info/PKG-INFO
+mylinear_cpp.egg-info/SOURCES.txt
+mylinear_cpp.egg-info/dependency_links.txt
+mylinear_cpp.egg-info/top_level.txt
