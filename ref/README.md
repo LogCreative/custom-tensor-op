@@ -67,9 +67,9 @@
 |||
 |---------------|---------------------------|
 | 实现方式（Linear层为例）| &nbsp; &nbsp; &nbsp; &nbsp; 性能评测 |
-|<br/> <br/>PyTorch原有张量运算<br/> <br/>&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 9905/10000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
-|<br/> <br/>基于Python API的定制化张量运算<br/> <br/>&nbsp;|9914/10000|
-|<br/> <br/>基于C++的定制化张量运算<br/> <br/>&nbsp;|9909/10000|
+|<br/> <br/>PyTorch原有张量运算<br/> <br/>&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 9905/10000 &nbsp; &nbsp; &nbsp; &nbsp; 221s &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|<br/> <br/>基于Python API的定制化张量运算<br/> <br/>&nbsp;|9914/10000  218s|
+|<br/> <br/>基于C++的定制化张量运算<br/> <br/>&nbsp;|9909/10000 221s|
 ||||
 
 ## 参考代码

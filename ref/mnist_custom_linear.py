@@ -187,4 +187,8 @@ def main():
 
 
 if __name__ == '__main__':
+    from time import time
+    start = time()
     main()
+    print()
+    print(time()-start)
