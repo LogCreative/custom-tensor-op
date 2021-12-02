@@ -32,13 +32,30 @@ class myConv2d(nn.Module):
     def forward(self, input):
         return myConv2dFunction.apply(input, self.weight, self.bias)
     
+# learning reference:
+# https://pytorch.org/tutorials/beginner/examples_autograd/two_layer_net_custom_function.html#:~:text=%EE%80%80PyTorch%EE%80%81%3A%20Defining%20New%20autograd%20%EE%80%80Functions%EE%80%81.%20A%20fully-connected%20ReLU,Variables%2C%20and%20uses%20%EE%80%80PyTorch%EE%80%81%20autograd%20to%20compute%20gradients.
 class myConv2dFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, input, weight, bias):
         # forward
-        raise NotImplementedError()
+        ctx.save_for_backward(input, weight, bias)
+        batch_size, in_channels, in_height, in_width = list(input.size())
+        out_channels, in_channels, kernel_height, kernel_width = list(weight.size())
+        output = torch.zeros(batch_size, out_channels, in_height-kernel_height+1, in_width-kernel_width+1)
+        for i in range(batch_size):
+            for j in range(out_channels):
+                for k in range(in_channels):
+                    # Fig 17-16 should be a convolution
+                    # output[i,j] += weight[j,k].mm(input[i,k].t())
+                output[i,j] += bias[j]
+        return output
         
     @staticmethod
-    def backward(ctx, grad_output, bias):
+    def backward(ctx, grad_output):
         # backward
-        raise NotImplementedError()
+        input, weight, bias = ctx.saved_tensors
+        grad_input = grad_weight = grad_bias = None
+        # Eq (17.3.10) grad_input = \sum grad_output * W^rot180
+        # Eq (17.3.19) grad_weight = input * grad_output
+        # Eq (17.3.21) grad_bias = grad_output
+
