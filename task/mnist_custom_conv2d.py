@@ -33,17 +33,6 @@ class myConv2d(nn.Module):
     def forward(self, input):
         return myConv2dFunction.apply(input, self.weight, self.bias)
 
-def conv2dbasis(input, kernal, padding=0):
-    h,w = list(input.size())
-    kh,kw = list(kernal.size())
-    oh,ow = h-kh+2*padding+1,w-kw+2*padding+1
-    output = torch.Tensor(oh,ow)
-    input_ = F.pad(input, (padding,padding,padding,padding), "constant", 0)
-    for i in range(oh):
-        for j in range(ow):
-            output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
-    return output # imm
-
 # learning reference:
 # https://pytorch.org/tutorials/beginner/examples_autograd/two_layer_net_custom_function.html#:~:text=%EE%80%80PyTorch%EE%80%81%3A%20Defining%20New%20autograd%20%EE%80%80Functions%EE%80%81.%20A%20fully-connected%20ReLU,Variables%2C%20and%20uses%20%EE%80%80PyTorch%EE%80%81%20autograd%20to%20compute%20gradients.
 class myConv2dFunction(torch.autograd.Function):
@@ -57,7 +46,7 @@ class myConv2dFunction(torch.autograd.Function):
         for i in range(batch_size):
             for j in range(out_channels):
                 for k in range(in_channels):
-                    output[i,j] += conv2dbasis(input[i,k], weight[j,k])
+                    output[i,j] += F.conv2d(input[i,k],weight[j,k])
                 output[i,j] += bias[j]
         return output
         

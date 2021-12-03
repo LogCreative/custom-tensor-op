@@ -1,6 +1,18 @@
 import unittest
 from torch import Tensor
-from mnist_custom_conv2d import conv2dbasis
+import torch.nn.functional as F
+
+# Legacy manually designed convolution operation.
+def conv2dbasis(input, kernal, padding=0):
+    h,w = list(input.size())
+    kh,kw = list(kernal.size())
+    oh,ow = h-kh+2*padding+1,w-kw+2*padding+1
+    output = Tensor(oh,ow)
+    input_ = F.pad(input, (padding,padding,padding,padding), "constant", 0)
+    for i in range(oh):
+        for j in range(ow):
+            output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
+    return output # imm
 
 class ConvTest(unittest.TestCase):
     def testBasicConv(self):
