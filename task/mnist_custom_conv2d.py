@@ -2,6 +2,7 @@ from __future__ import print_function
 import math
 import argparse
 import torch
+from torch.functional import Tensor
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
@@ -32,12 +33,15 @@ class myConv2d(nn.Module):
     def forward(self, input):
         return myConv2dFunction.apply(input, self.weight, self.bias)
 
-def conv2dbasis(input, kernal, output):
+def conv2dbasis(input, kernal, padding=0):
     h,w = list(input.size())
     kh,kw = list(kernal.size())
-    for i in range(h-kh+1):
-        for j in range(w-kw+1):
-            output[i,j] = input[i:i+kh,j:j+kw].mul(kernal).sum()
+    oh,ow = h-kh+2*padding+1,w-kw+2*padding+1
+    output = torch.Tensor(oh,ow)
+    input_ = F.pad(input, (padding,padding,padding,padding), "constant", 0)
+    for i in range(oh):
+        for j in range(ow):
+            output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
     return output # imm
 
 # learning reference:
@@ -63,6 +67,8 @@ class myConv2dFunction(torch.autograd.Function):
         input, weight, bias = ctx.saved_tensors
         grad_input = grad_weight = grad_bias = None
         # Eq (17.3.10) grad_input = \sum grad_output * W^rot180
+
         # Eq (17.3.19) grad_weight = input * grad_output
         # Eq (17.3.21) grad_bias = grad_output
+        grad_bias = grad_output
 
