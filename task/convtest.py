@@ -2,7 +2,7 @@ import unittest
 import torch
 from torch import Tensor
 import torch.nn.functional as F
-from mnist_custom_conv2d import conv2dbasis, myConv2dFunction
+from custom_conv2d import conv2dbasis, myConv2dFunction
 
 class ConvTest(unittest.TestCase):
     def testBasicConv(self):
