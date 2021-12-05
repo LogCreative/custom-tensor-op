@@ -55,9 +55,14 @@ class myConv2dFunction(torch.autograd.Function):
         # backward
         input, weight, bias = ctx.saved_tensors
         grad_input = grad_weight = grad_bias = None
-        # Eq (17.3.10) grad_input = \sum grad_output * W^rot180
-
+        # TODO: consider the dimension here...
+        # Eq (17.3.10) grad_input = \sum 
+        # grad_output * W^rot180
+        weight_ = Tensor.rot90(weight, 2)
+        F.conv2d(grad_output, weight_, padding=len(weight)-1)
         # Eq (17.3.19) grad_weight = input * grad_output
+        F.conv2d(input, grad_output)
         # Eq (17.3.21) grad_bias = grad_output
         grad_bias = grad_output
+        return grad_input, grad_weight, grad_bias
 
