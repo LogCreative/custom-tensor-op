@@ -2,12 +2,24 @@ from __future__ import print_function
 import math
 import argparse
 import torch
-from torch.functional import Tensor
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
+import torch.utils.data
+
+# TODO: replace to F.conv2d
+def conv2dbasis(input, kernal, padding=0):
+    h,w = list(input.size())
+    kh,kw = list(kernal.size())
+    oh,ow = h-kh+2*padding+1,w-kw+2*padding+1
+    output = torch.Tensor(oh,ow)
+    input_ = F.pad(input, (padding,padding,padding,padding), "constant", 0)
+    for i in range(oh):
+        for j in range(ow):
+            output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
+    return output # imm
 
 # API Reference:
 # https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d
@@ -46,7 +58,7 @@ class myConv2dFunction(torch.autograd.Function):
         for i in range(batch_size):
             for j in range(out_channels):
                 for k in range(in_channels):
-                    output[i,j] += F.conv2d(input[i,k],weight[j,k])
+                    output[i,j] += conv2dbasis(input[i,k],weight[j,k])
                 output[i,j] += bias[j]
         return output
         
@@ -54,15 +66,23 @@ class myConv2dFunction(torch.autograd.Function):
     def backward(ctx, grad_output):
         # backward
         input, weight, bias = ctx.saved_tensors
-        grad_input = grad_weight = grad_bias = None
-        # TODO: consider the dimension here...
-        # Eq (17.3.10) grad_input = \sum 
-        # grad_output * W^rot180
-        weight_ = Tensor.rot90(weight, 2)
-        F.conv2d(grad_output, weight_, padding=len(weight)-1)
+        batch_size, in_channels, in_height, in_width = list(input.size())
+        out_channels, in_channels, kernel_height, kernel_width = list(weight.size())
+        grad_input = torch.zeros(input.size())
+        grad_weight = torch.zeros(weight.size())
+        grad_bias = torch.Tensor(bias.size())
+        # Eq (17.3.10) grad_input = \sum grad_output * W^rot180
+        for i in range(batch_size):
+            for j in range(out_channels):
+                for k in range(in_channels):
+                    weight_ = torch.Tensor.rot90(weight[j,k], 2)
+                    grad_input[i,k] += conv2dbasis(grad_output[i,j], weight_, padding=len(weight)-1)
         # Eq (17.3.19) grad_weight = input * grad_output
-        F.conv2d(input, grad_output)
+                    grad_weight[j,k] += conv2dbasis(input[i,k], grad_output[i,j])
         # Eq (17.3.21) grad_bias = grad_output
-        grad_bias = grad_output
+                grad_bias[j] = grad_output[j]
         return grad_input, grad_weight, grad_bias
 
+if __name__=="__main__":
+    testInput = torch.randn(3,3,32,32,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True)
+    print(torch.autograd.gradcheck(myConv2dFunction.apply, testInput, eps=1e-6, atol=1e-4))
