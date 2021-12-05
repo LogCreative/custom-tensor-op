@@ -1,18 +1,8 @@
 import unittest
+import torch
 from torch import Tensor
 import torch.nn.functional as F
-
-# Legacy manually designed convolution operation.
-def conv2dbasis(input, kernal, padding=0):
-    h,w = list(input.size())
-    kh,kw = list(kernal.size())
-    oh,ow = h-kh+2*padding+1,w-kw+2*padding+1
-    output = Tensor(oh,ow)
-    input_ = F.pad(input, (padding,padding,padding,padding), "constant", 0)
-    for i in range(oh):
-        for j in range(ow):
-            output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
-    return output # imm
+from mnist_custom_conv2d import conv2dbasis, myConv2dFunction
 
 class ConvTest(unittest.TestCase):
     def testBasicConv(self):
@@ -29,6 +19,11 @@ class ConvTest(unittest.TestCase):
             1
         )
         self.assertEqual(Tensor.equal(res, Tensor([[1,9,-6,3],[14,-1,4,1],[4,6,16,1],[3,13,-2,1]])), True)
+
+    @unittest.expectedFailure
+    def testMyConv2dFunction(self):
+        testInput = (torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True))
+        print(torch.autograd.gradcheck(myConv2dFunction.apply, testInput, eps=1e-3, rtol=1e-4,nondet_tol=1e-3))
 
 if __name__=="__main__":
     unittest.main()

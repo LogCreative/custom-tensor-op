@@ -1,13 +1,7 @@
-from __future__ import print_function
 import math
-import argparse
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.optim.lr_scheduler import StepLR
-import torch.utils.data
 
 # TODO: replace to F.conv2d
 def conv2dbasis(input, kernal, padding=0):
@@ -82,7 +76,3 @@ class myConv2dFunction(torch.autograd.Function):
         # Eq (17.3.21) grad_bias = grad_output
                 grad_bias[j] = grad_output[i,j].sum()
         return grad_input, grad_weight, grad_bias
-
-if __name__=="__main__":
-    testInput = torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True)
-    print(torch.autograd.gradcheck(myConv2dFunction.apply, testInput, eps=1e-6, atol=1e-4))
