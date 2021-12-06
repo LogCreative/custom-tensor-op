@@ -69,8 +69,7 @@ class myConv2dFunction(torch.autograd.Function):
         for i in range(batch_size):
             for j in range(out_channels):
                 for k in range(in_channels):
-                    weight_ = torch.Tensor.rot90(weight[j,k], 2)
-                    grad_input[i,k] += conv2dbasis(grad_output[i,j], weight_, padding=kernel_height-1)
+                    grad_input[i,k] += conv2dbasis(grad_output[i,j], torch.Tensor.rot90(weight[j,k], 2), padding=kernel_height-1)
         # Eq (17.3.19) grad_weight = input * grad_output
                     grad_weight[j,k] += conv2dbasis(input[i,k], grad_output[i,j])
         # Eq (17.3.21) grad_bias = grad_output
