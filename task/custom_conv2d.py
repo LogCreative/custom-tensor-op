@@ -1,5 +1,7 @@
 import math
 import torch
+from torch._C import device
+from torch.autograd.function import InplaceFunction
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -15,6 +17,7 @@ def conv2dbasis(input, kernal, padding=0):
             output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
     return output # imm
 
+device = "cpu"
 # API Reference:
 # https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d
 class myConv2d(nn.Module):
@@ -37,6 +40,7 @@ class myConv2d(nn.Module):
         self.bias.data.uniform_(-sqrtk, sqrtk)
     
     def forward(self, input):
+        global device
         return myConv2dFunction.apply(input, self.weight, self.bias)
 
 # learning reference:
@@ -44,16 +48,20 @@ class myConv2d(nn.Module):
 class myConv2dFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, input, weight, bias):
+        global device
         # forward
         ctx.save_for_backward(input, weight, bias)
         batch_size, in_channels, in_height, in_width = list(input.size())
         out_channels, in_channels, kernel_height, kernel_width = list(weight.size())
+        input = input.to(device)
+        weight = weight.to(device)
+        bias = bias.to(device)
         output = torch.zeros(batch_size, out_channels, in_height-kernel_height+1, in_width-kernel_width+1)
         for i in range(batch_size):
             for j in range(out_channels):
                 for k in range(in_channels):
-                    output[i,j] += conv2dbasis(input[i,k],weight[j,k])
-                output[i,j] += bias[j]
+                    output[i,j].add_(conv2dbasis(input[i,k],weight[j,k]))
+                output[i,j].add_(bias[j])
         return output
         
     @staticmethod
