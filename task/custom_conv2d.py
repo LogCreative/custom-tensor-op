@@ -1,6 +1,5 @@
 import math
 import torch
-from torch._C import device
 from torch.autograd.function import InplaceFunction
 import torch.nn as nn
 import torch.nn.functional as F
@@ -17,6 +16,7 @@ def conv2dbasis(input, kernal, padding=0):
             output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
     return output # imm
 
+# TODO: to make it cuda available
 device = "cpu"
 # API Reference:
 # https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d
