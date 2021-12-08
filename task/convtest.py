@@ -20,10 +20,9 @@ class ConvTest(unittest.TestCase):
         )
         self.assertEqual(Tensor.equal(res, Tensor([[1,9,-6,3],[14,-1,4,1],[4,6,16,1],[3,13,-2,1]])), True)
 
-    @unittest.expectedFailure
     def testMyConv2dFunction(self):
         testInput = (torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True))
-        print(torch.autograd.gradcheck(myConv2dFunction.apply, testInput, eps=1e-3, rtol=1e-4,nondet_tol=1e-3))
+        print(torch.autograd.gradcheck(myConv2dFunction.apply, testInput, eps=1e-3, rtol=1e-4))
 
 if __name__=="__main__":
     unittest.main()
