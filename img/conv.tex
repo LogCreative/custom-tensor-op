@@ -5,7 +5,14 @@
     \author{Log Creative}
     \date{}
     \maketitle
-    \begin{equation}
-        \texttt{conv2d}(\mathbf{I},\mathbf{W},\mathbf{B})=
-    \end{equation}
+    \begin{align*}
+        \mathbf{I}_{N\times C_\text{in}\times H\times W}&\\
+        \mathbf{W}_{C_\text{out}\times C_\text{in}\times a_0\times a_1}&\\
+        \mathbf{B}_{C_\text{out}}&\\
+        \mathbf{O}_{N\times C_\text{out}\times H_\text{out}\times W_\text{out}}&=\texttt{F.conv2d}(\mathbf{I},\mathbf{W},\mathbf{B})\\
+        \mathbf{O}_{i,j}&=\mathbf{B}_j+\sum_{k=0}^{C_\text{in}-1}\mathbf{W}_{j,k}*\mathbf{I}_{i,k}\\
+        \mathbf{\delta}^\text{in}_{i,k}&=\mathbf{\delta}^\text{out}_{i,j}*\mathbf{W}^{rot180}_{j,k}\\
+        \mathbf{\delta}_{w}&=\mathbf{I}*\mathbf{\delta}^\text{out}\\
+        \mathbf{\delta}_{b}&=\mathbf{\delta}^\text{out}
+    \end{align*}
 \end{document}
