@@ -22,6 +22,8 @@ Linear 层已经被实现，所以在此仅给出运行情况：
 |<br/> <br/>基于C++的定制化张量运算<br/> <br/>&nbsp;|9909/10000 221s|
 ||||
 
+线性层的自定义不会显著影响性能。
+
 Conv2d 的运行情况
 
 |||
@@ -32,11 +34,16 @@ Conv2d 的运行情况
 |<br/> <br/>基于C++的定制化张量运算<br/> <br/>&nbsp;|9907/10000 234s|
 ||||
 
+卷积层的自定义会稍微增加一些时间，但是主要应该认为是大量矩阵在 CPU 和 GPU 之间传输所致。
+
 ## 卷积层原理
 
 [Pytorch的API](https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d) 告诉我们
 ```python
-torch.nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True, padding_mode='zeros', device=None, dtype=None)
+torch.nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, 
+padding=0, dilation=1, groups=1, 
+bias=True, padding_mode='zeros', 
+device=None, dtype=None)
 ```
 检视 MNIST 代码后发现我们可以直接使用后面所有的默认值，不需要实现全部的参数。所以本项目的函数原型为
 ```python
@@ -45,7 +52,7 @@ myConv2d(self, in_channels, out_channels, kernel_size)
 
 然后仿照线性层，实现`myConv2dFunction`调用函数的`forward`和`backward`函数。
 
-见 [卷积推导](logcreative.github.io/custom-tensor/img/conv.pdf)。对应的细节的下标实现见 [CPU 版本](task/custom_conv2d_cpu.py)，但请注意该模块不能在 GPU 版本中运行成功，有数据传输问题，为避免此将直接通过下一节的 Pytorch API 实现。该代码仅供展示原理，并且在 Python 层直接运算矩阵会有精度问题。
+见 [卷积推导](https://logcreative.github.io/custom-tensor/img/conv.pdf)。对应的细节的下标实现见 [CPU 版本](task/custom_conv2d_cpu.py)，但请注意该模块不能在 GPU 版本中运行成功，有数据传输问题，为避免此将直接通过下一节的 Pytorch API 实现。该代码仅供展示原理，并且在 Python 层直接运算矩阵会有精度问题。
 
 ## Python 版本实现
 
