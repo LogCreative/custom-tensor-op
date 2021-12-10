@@ -72,7 +72,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>C:\Users\lizil\source\ref\custom-tensor\task\libtorch\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\lizil\source\ref\custom-tensor\task\libtorch\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\lizil\AppData\Roaming\Python\Python39\site-packages\torch\include\torch\csrc\api\include;C:\Users\lizil\source\ref\custom-tensor\task\libtorch\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
