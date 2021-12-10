@@ -52,7 +52,7 @@ myConv2d(in_channels, out_channels, kernel_size)
 
 然后仿照线性层，实现`myConv2dFunction`调用函数的`forward`和`backward`函数。
 
-见 [卷积推导](https://logcreative.github.io/custom-tensor/img/conv.pdf)。对应的细节的下标实现见 [CPU 版本](task/custom_conv2d_cpu.py)，但请注意该模块不能在 GPU 版本中运行成功，有数据传输问题，为避免此将直接通过下一节的 Pytorch API 实现。该代码仅供展示原理，并且在 Python 层直接运算矩阵会有精度问题。
+见 [卷积推导](https://logcreative.github.io/custom-tensor/img/conv.pdf)。对应的细节的下标实现见 [CPU 版本](task/custom_conv2d_cpu.py)，但请注意该模块不能在 GPU 版本中运行成功，有数据传输问题，为避免此将直接通过下一节的 Pytorch API 实现。该代码仅供展示原理，并且在 Python 层直接运算矩阵会有精度问题。代码一定程度参考[配套代码](https://github.com/microsoft/ai-edu/blob/master/%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/A2-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/%E7%AC%AC8%E6%AD%A5%20-%20%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/src/ch17-CNNBasic/MiniFramework/ConvLayer.py)。
 
 ## Python 版本实现
 
@@ -63,7 +63,7 @@ cd task
 python mnist_custom_conv2d.py
 ```
 
-为了转换为 GPU 可以处理的[代码](task/custom_conv2d.py)，需要统一下标的处理方式，以直接使用 \verb"F.conv2d" 函数，会使用 `transpose` 进行处理。
+为了转换为 GPU 可以处理的[代码](task/custom_conv2d.py)，需要统一下标的处理方式，以直接使用 `F.conv2d` 函数，会使用 `transpose` 进行处理。
 
 ## C++ 版本实现
 
@@ -77,3 +77,5 @@ python mnist_custom_conv2d_cpp.py
 ```
 
 [代码](task/myconv2d_cpp/myconv2d.cpp)结构与 Python 版本类似，但是需要注意`conv2d`在c++中的调用方式可选参数需要使用`Conv2dFuncOptions`包裹。
+
+本项目含有[单元测试](task/convtest.py)。
