@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from custom_conv2d_cpu import conv2dbasis
 from custom_conv2d import myConv2dFunction
 from custom_conv2d_cpp import myConv2dFunctionCpp
+from custom_conv2d_cpu import myConv2dFunctionCpu
 
 class ConvTest(unittest.TestCase):
     def testBasicConv(self):
@@ -22,9 +23,22 @@ class ConvTest(unittest.TestCase):
         )
         self.assertEqual(Tensor.equal(res, Tensor([[1,9,-6,3],[14,-1,4,1],[4,6,16,1],[3,13,-2,1]])), True)
 
+    @unittest.expectedFailure
+    def testMyConv2dFunctionCpu(self):
+        testInput = (torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True))
+        self.assertEqual(torch.autograd.gradcheck(myConv2dFunctionCpu.apply, testInput),True)
+        # no enough accuaracy.
+
     def testMyConv2dFunction(self):
         testInput = (torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True))
         self.assertEqual(torch.autograd.gradcheck(myConv2dFunction.apply, testInput),True)
+
+    @unittest.expectedFailure
+    def testMyConv2dFunctionCpp(self):
+        testInput = (torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True))
+        self.assertEqual(torch.autograd.gradcheck(myConv2dFunctionCpu.apply, testInput),True)
+        # cannot calculate the numerical backward automatically
+        # for cpp embedding.
 
 if __name__=="__main__":
     unittest.main()

@@ -23,14 +23,14 @@ def conv2dbasis(input, kernal, padding=(0,0)):
 device = "cpu"
 # API Reference:
 # https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d
-class myConv2d(nn.Module):
+class myConv2dCpu(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size):
         # Since we didn't use other parameters,
         # we ignore that in the customized model.
         #
         # by default:
         # stride=1, padding=0, dilation=1, groups=1, bias=True, padding_mode='zeros', device=None, dtype=None
-        super(myConv2d, self).__init__()
+        super(myConv2dCpu, self).__init__()
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.kenerl_size = kernel_size
@@ -44,11 +44,11 @@ class myConv2d(nn.Module):
     
     def forward(self, input):
         global device
-        return myConv2dFunction.apply(input, self.weight, self.bias)
+        return myConv2dFunctionCpu.apply(input, self.weight, self.bias)
 
 # learning reference:
 # https://pytorch.org/tutorials/beginner/examples_autograd/two_layer_net_custom_function.html#:~:text=%EE%80%80PyTorch%EE%80%81%3A%20Defining%20New%20autograd%20%EE%80%80Functions%EE%80%81.%20A%20fully-connected%20ReLU,Variables%2C%20and%20uses%20%EE%80%80PyTorch%EE%80%81%20autograd%20to%20compute%20gradients.
-class myConv2dFunction(torch.autograd.Function):
+class myConv2dFunctionCpu(torch.autograd.Function):
     @staticmethod
     def forward(ctx, input, weight, bias):
         global device
