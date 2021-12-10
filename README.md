@@ -40,14 +40,14 @@ Conv2d 的运行情况
 
 [Pytorch的API](https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d) 告诉我们
 ```python
-torch.nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, 
-padding=0, dilation=1, groups=1, 
+torch.nn.Conv2d(in_channels, out_channels, kernel_size, 
+stride=1, padding=0, dilation=1, groups=1, 
 bias=True, padding_mode='zeros', 
 device=None, dtype=None)
 ```
 检视 MNIST 代码后发现我们可以直接使用后面所有的默认值，不需要实现全部的参数。所以本项目的函数原型为
 ```python
-myConv2d(self, in_channels, out_channels, kernel_size)
+myConv2d(in_channels, out_channels, kernel_size)
 ```
 
 然后仿照线性层，实现`myConv2dFunction`调用函数的`forward`和`backward`函数。
