@@ -3,10 +3,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# TODO: to make it cuda available
-device = "cpu"
-# API Reference:
-# https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d
 class myConv2d(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size):
         # Since we didn't use other parameters,
@@ -28,15 +24,10 @@ class myConv2d(nn.Module):
     
     def forward(self, input):
         return myConv2dFunction.apply(input, self.weight, self.bias)
-
-device = "cpu"
-# learning reference:
-# https://pytorch.org/tutorials/beginner/examples_autograd/two_layer_net_custom_function.html#:~:text=%EE%80%80PyTorch%EE%80%81%3A%20Defining%20New%20autograd%20%EE%80%80Functions%EE%80%81.%20A%20fully-connected%20ReLU,Variables%2C%20and%20uses%20%EE%80%80PyTorch%EE%80%81%20autograd%20to%20compute%20gradients.
 class myConv2dFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, input, weight, bias):
         # forward
-        global device
         ctx.save_for_backward(input, weight, bias)
         return F.conv2d(input,weight,bias)
         

@@ -355,3 +355,5 @@ data/
 *.fdb_latexmk
 *.fls
 *.synctex.gz
+
+task/libtorch
