@@ -31,10 +31,11 @@ class myConv2dFunctionCpp(torch.autograd.Function):
     def forward(ctx, input, weight, bias):
         # forward
         ctx.save_for_backward(input, weight, bias)
-        return myconv2d_cpp.forward(input, weight, bias)
+        return myconv2d_cpp.forward(input, weight, bias)[0]
         
     @staticmethod
     def backward(ctx, grad_output):
         # backward
         input, weight, bias = ctx.saved_tensors
-        return myconv2d_cpp.backward(grad_output, input, weight, bias)
+        grad_input, grad_weight, grad_bias = myconv2d_cpp.backward(grad_output, input, weight, bias)
+        return grad_input, grad_weight, grad_bias
