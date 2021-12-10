@@ -11,8 +11,8 @@
 
     \begin{align}
         \mathbf{I}_{N\times C_\text{in}\times H\times W}&\quad\text{输入}\nonumber\\
-        \mathbf{W}_{C_\text{out}\times C_\text{in}\times A_0\times A_1}&\quad\text{权重}\nonumber\\
-        \mathbf{B}_{C_\text{out}}&\quad\text{偏移}\nonumber\\
+        \mathbf{W}_{C_\text{out}\times C_\text{in}\times A_0\times A_1}&\quad\text{权重，初始化值}(-\sqrt{k},\sqrt{k})\nonumber\\
+        \mathbf{B}_{C_\text{out}}&\quad\text{偏移，初始化值}(-\sqrt{k},\sqrt{k})\nonumber\\
         \mathbf{O}_{N\times C_\text{out}\times H_\text{out}\times W_\text{out}}&=\texttt{F.conv2d}(\mathbf{I},\mathbf{W},\mathbf{B})\\
         \mathbf{O}_{i,j}&=\mathbf{B}_j+\sum_{k=0}^{C_\text{in}-1}\mathbf{W}_{j,k}*\mathbf{I}_{i,k}\label{output}\\
         \mathbf{\delta}^\text{in}_{i,k}&=\mathbf{\delta}^\text{out}_{i,j}*\mathbf{W}^{rot180}_{j,k}\label{deltain}\\
@@ -26,6 +26,10 @@
     \end{equation}
     即默认把大的矩阵作为第一个参数，以与 \verb"F.conv2d" 的参数保持统一。
 
+    参数
+    \begin{equation}
+        k=\frac{1}{C_\text{in}A_0A_1}
+    \end{equation}
     \bibliography{ref}
 
 \end{document}

@@ -34,10 +34,39 @@ Conv2d 的运行情况
 
 ## 卷积层原理
 
-见 [卷积推导](img/conv.pdf)。
+[Pytorch的API](https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d) 告诉我们
+```python
+torch.nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True, padding_mode='zeros', device=None, dtype=None)
+```
+检视 MNIST 代码后发现我们可以直接使用后面所有的默认值，不需要实现全部的参数。所以本项目的函数原型为
+```python
+myConv2d(self, in_channels, out_channels, kernel_size)
+```
+
+然后仿照线性层，实现`myConv2dFunction`调用函数的`forward`和`backward`函数。
+
+见 [卷积推导](logcreative.github.io/custom-tensor/img/conv.pdf)。对应的细节的下标实现见 [CPU 版本](task/custom_conv2d_cpu.py)，但请注意该模块不能在 GPU 版本中运行成功，有数据传输问题，为避免此将直接通过下一节的 Pytorch API 实现。该代码仅供展示原理，并且在 Python 层直接运算矩阵会有精度问题。
 
 ## Python 版本实现
 
-使用
+运行方法
+
+```cmd
+cd task
+python mnist_custom_conv2d.py
+```
+
+为了转换为 GPU 可以处理的[代码](task/custom_conv2d.py)，需要统一下标的处理方式，以直接使用 \verb"F.conv2d" 函数，会使用 `transpose` 进行处理。
 
 ## C++ 版本实现
+
+运行方法
+
+```cmd
+cd task/myconv2d_cpp
+python setup.py install --user
+cd ..
+python mnist_custom_conv2d_cpp.py
+```
+
+[代码](task/myconv2d_cpp/myconv2d.cpp)结构与 Python 版本类似，但是需要注意`conv2d`在c++中的调用方式可选参数需要使用`Conv2dFuncOptions`包裹。
