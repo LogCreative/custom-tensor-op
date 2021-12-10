@@ -1,21 +1,7 @@
 import math
 import torch
-from torch.autograd.function import InplaceFunction
 import torch.nn as nn
 import torch.nn.functional as F
-import custom_conv2d_cpu
-
-# TODO: replace to F.conv2d
-def conv2dbasis(input, kernal, padding=0):
-    h,w = list(input.size())
-    kh,kw = list(kernal.size())
-    oh,ow = h-kh+2*padding+1,w-kw+2*padding+1
-    output = torch.Tensor(oh,ow)
-    input_ = F.pad(input, (padding,padding,padding,padding), "constant", 0)
-    for i in range(oh):
-        for j in range(ow):
-            output[i,j] = input_[i:i+kh,j:j+kw].mul(kernal).sum()
-    return output # imm
 
 # TODO: to make it cuda available
 device = "cpu"
@@ -52,21 +38,14 @@ class myConv2dFunction(torch.autograd.Function):
         # forward
         global device
         ctx.save_for_backward(input, weight, bias)
-        batch_size, in_channels, in_height, in_width = list(input.size())
-        out_channels, in_channels, kernel_height, kernel_width = list(weight.size())
         return F.conv2d(input,weight,bias)
         
     @staticmethod
     def backward(ctx, grad_output):
         # backward
         input, weight, bias = ctx.saved_tensors
-        batch_size, in_channels, in_height, in_width = list(input.size())
         out_channels, in_channels, kernel_height, kernel_width = list(weight.size())
-        grad_input = F.conv2d(grad_output.repeat(1,in_channels,1,1), torch.Tensor.rot90(weight,2,[2,3]).repeat(in_channels,1,1,1), padding=(kernel_width-1,kernel_height-1))
-        grad_weight = F.conv2d(input, grad_output.repeat(1,in_channels,1,1)).sum([0]).unsqueeze(0)
+        grad_input = F.conv2d(grad_output, torch.Tensor.rot90(weight,2,[2,3]).transpose(0,1), padding=(kernel_width-1,kernel_height-1))
+        grad_weight = F.conv2d(input.transpose(0,1), grad_output.transpose(0,1)).transpose(0,1)
         grad_bias = grad_output.sum([0,2,3])
         return grad_input, grad_weight, grad_bias
-
-if __name__=="__main__":
-    testInput = (torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True))
-    print(torch.autograd.gradcheck(myConv2dFunction.apply, testInput, eps=1e-3, rtol=1e-4))
