@@ -24,6 +24,7 @@ class myConv2d(nn.Module):
     
     def forward(self, input):
         return myConv2dFunction.apply(input, self.weight, self.bias)
+
 class myConv2dFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, input, weight, bias):

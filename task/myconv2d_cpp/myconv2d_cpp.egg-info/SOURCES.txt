@@ -1,0 +1,6 @@
+myconv2d.cpp
+setup.py
+myconv2d_cpp.egg-info/PKG-INFO
+myconv2d_cpp.egg-info/SOURCES.txt
+myconv2d_cpp.egg-info/dependency_links.txt
+myconv2d_cpp.egg-info/top_level.txt

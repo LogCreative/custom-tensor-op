@@ -4,6 +4,7 @@ from torch import Tensor
 import torch.nn.functional as F
 from custom_conv2d_cpu import conv2dbasis
 from custom_conv2d import myConv2dFunction
+from custom_conv2d_cpp import myConv2dFunctionCpp
 
 class ConvTest(unittest.TestCase):
     def testBasicConv(self):
@@ -23,7 +24,7 @@ class ConvTest(unittest.TestCase):
 
     def testMyConv2dFunction(self):
         testInput = (torch.randn(3,3,5,5,dtype=torch.double,requires_grad=True),torch.randn(1,3,3,3,dtype=torch.double,requires_grad=True),torch.randn(1,dtype=torch.double,requires_grad=True))
-        self.assertEqual(torch.autograd.gradcheck(myConv2dFunction.apply, testInput, eps=1e-3, rtol=1e-4),True)
+        self.assertEqual(torch.autograd.gradcheck(myConv2dFunction.apply, testInput),True)
 
 if __name__=="__main__":
     unittest.main()
