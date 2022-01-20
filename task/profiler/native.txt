@@ -1,16 +1,26 @@
 -------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
                                                    Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg    # of Calls  
 -------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
-                                        model_inference        21.14%        5.995s        76.59%       21.725s       21.725s        7.332s        25.93%       21.725s       21.725s             1  
-enumerate(DataLoader)#_MultiProcessingDataLoaderIter...        18.53%        5.256s        18.63%        5.284s       5.562ms        5.108s        18.07%        5.118s       5.388ms           950  
-                           Optimizer.step#Adadelta.step         2.69%     761.981ms        14.74%        4.180s       4.456ms     576.975ms         2.04%        2.949s       3.144ms           938  
-                                            aten::zeros         6.34%        1.799s         6.85%        1.943s     687.466us      88.483ms         0.31%     140.641ms      49.749us          2827  
-                                           aten::conv2d         0.15%      43.346ms         5.56%        1.577s     831.542us      23.904ms         0.08%        3.307s       1.744ms          1896  
-                                      aten::convolution         0.14%      40.565ms         5.41%        1.533s     808.680us      23.543ms         0.08%        3.283s       1.732ms          1896  
-                                     aten::_convolution         0.23%      66.041ms         5.26%        1.493s     787.285us      46.030ms         0.16%        3.259s       1.719ms          1896  
-                                               aten::to         0.26%      74.618ms         4.85%        1.375s     721.403us      59.405ms         0.21%     326.892ms     171.507us          1906  
-                                         aten::_to_copy         0.32%      90.973ms         4.58%        1.300s     682.254us      98.735ms         0.35%     267.487ms     140.339us          1906  
-    autograd::engine::evaluate_function: AddmmBackward0         0.37%     105.310ms         4.25%        1.205s     642.307us      85.815ms         0.30%     774.006ms     412.583us          1876  
+                                        model_inference        19.94%        7.235s        76.74%       27.846s       27.846s        8.725s        24.71%       27.847s       27.847s             1  
+enumerate(DataLoader)#_MultiProcessingDataLoaderIter...        20.01%        7.261s        20.11%        7.297s       7.681ms        7.160s        20.28%        7.178s       7.556ms           950  
+                           Optimizer.step#Adadelta.step         2.98%        1.082s        16.49%        5.983s       6.379ms        1.147s         3.25%        4.205s       4.483ms           938  
+                                            aten::zeros         7.35%        2.668s         7.87%        2.855s       1.010ms     119.591ms         0.34%     193.184ms      68.335us          2827  
+                                           aten::conv2d         0.17%      63.106ms         6.19%        2.246s       1.185ms      26.075ms         0.07%        3.858s       2.035ms          1896  
+                                      aten::convolution         0.15%      55.590ms         6.02%        2.183s       1.151ms      29.207ms         0.08%        3.832s       2.021ms          1896  
+                                     aten::_convolution         0.24%      88.026ms         5.86%        2.127s       1.122ms      53.031ms         0.15%        3.802s       2.005ms          1896  
+                                aten::cudnn_convolution         4.22%        1.532s         4.72%        1.713s     903.263us        3.099s         8.78%        3.177s       1.676ms          1896  
+    autograd::engine::evaluate_function: AddmmBackward0         0.37%     132.746ms         3.87%        1.404s     748.226us     153.002ms         0.43%        1.164s     620.465us          1876  
+                                             aten::mul_         3.59%        1.304s         3.59%        1.304s      57.945us     823.427ms         2.33%     823.427ms      36.577us         22512  
+                                           aten::linear         0.17%      61.565ms         3.06%        1.109s     584.944us      44.320ms         0.13%        1.027s     541.801us          1896  
+autograd::engine::evaluate_function: CudnnConvolutio...         0.19%      68.398ms         3.06%        1.109s     591.098us      22.355ms         0.06%        3.037s       1.619ms          1876  
+                                                aten::t         1.03%     375.310ms         2.87%        1.041s     110.693us     236.866ms         0.67%     604.829ms      64.344us          9400  
+                              CudnnConvolutionBackward0         0.14%      49.252ms         2.87%        1.041s     554.638us      30.447ms         0.09%        3.015s       1.607ms          1876  
+                                         AddmmBackward0         0.32%     116.366ms         2.86%        1.036s     552.403us     166.418ms         0.47%     899.669ms     479.568us          1876  
+                                            aten::zero_         1.39%     503.259ms         2.80%        1.016s      83.144us     404.673ms         1.15%     870.909ms      71.298us         12215  
+                                              aten::add         2.76%        1.000s         2.76%        1.000s      66.656us     508.719ms         1.44%     508.719ms      33.897us         15008  
+                       aten::cudnn_convolution_backward         0.17%      62.716ms         2.73%     991.249ms     528.384us      21.549ms         0.06%        2.984s       1.591ms          1876  
+autograd::engine::evaluate_function: struct torch::a...         0.74%     269.694ms         2.70%     978.336ms     130.375us     191.801ms         0.54%     668.206ms      89.047us          7504  
+                                             aten::add_         2.67%     967.364ms         2.67%     967.364ms      57.254us        1.070s         3.03%        1.070s      63.321us         16896  
 -------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
-Self CPU time total: 28.363s
-Self CUDA time total: 28.278s
+Self CPU time total: 36.286s
+Self CUDA time total: 35.314s

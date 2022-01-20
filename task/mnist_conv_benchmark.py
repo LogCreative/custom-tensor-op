@@ -45,7 +45,7 @@ urllib.request.install_opener(opener)
 
 import os #
 
-category = "native" # change the target here.
+category = "cppver" # change the target here.
 
 if category == "pyver":
     from custom_conv2d import myConv2d  #
@@ -177,7 +177,7 @@ def main():
     if not os.path.exists("profiler/"):
         os.mkdir("profiler")
     with open("profiler/" + category + ".txt", "w") as f:
-        f.write(prof.key_averages(group_by_input_shape=True).table(sort_by="cpu_time_total", row_limit=10))
+        f.write(prof.key_averages(group_by_input_shape=True).table(sort_by="cpu_time_total", row_limit=20))
 
     if args.save_model:
         torch.save(model.state_dict(), "mnist_cnn.pt")

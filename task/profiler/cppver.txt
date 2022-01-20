@@ -1,16 +1,26 @@
 -------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
                                                    Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg    # of Calls  
 -------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
-                                        model_inference        22.77%        6.947s        75.05%       22.899s       22.899s        8.937s        28.68%       22.900s       22.900s             1  
-enumerate(DataLoader)#_MultiProcessingDataLoaderIter...        16.08%        4.907s        16.18%        4.937s       5.197ms        4.801s        15.41%        4.810s       5.063ms           950  
-                           Optimizer.step#Adadelta.step         2.85%     868.024ms        13.77%        4.201s       4.478ms     615.416ms         1.98%        2.965s       3.161ms           938  
-                                           aten::conv2d         0.36%     108.716ms        10.25%        3.127s     553.615us      57.452ms         0.18%        7.958s       1.409ms          5648  
-                                      aten::convolution         0.53%     160.815ms         9.89%        3.018s     534.366us     103.330ms         0.33%        7.900s       1.399ms          5648  
-                                     aten::_convolution         0.54%     166.098ms         9.37%        2.857s     505.893us      92.769ms         0.30%        7.797s       1.380ms          5648  
-autograd::engine::evaluate_function: myConv2dFunctio...         0.23%      70.353ms         8.24%        2.513s       1.340ms      12.377ms         0.04%        5.282s       2.816ms          1876  
-                            myConv2dFunctionCppBackward         0.40%     122.537ms         8.01%        2.443s       1.302ms      96.131ms         0.31%        5.270s       2.809ms          1876  
-                                aten::cudnn_convolution         5.56%        1.698s         7.96%        2.428s     429.814us        6.261s        20.09%        7.024s       1.244ms          5648  
-                                               aten::to         0.28%      86.786ms         6.66%        2.032s       1.066ms      66.859ms         0.21%     335.866ms     176.215us          1906  
+                                        model_inference        22.62%        8.989s        74.30%       29.522s       29.522s       10.651s        27.22%       29.523s       29.523s             1  
+enumerate(DataLoader)#_MultiProcessingDataLoaderIter...        17.79%        7.067s        17.88%        7.105s       7.479ms        7.008s        17.91%        7.026s       7.396ms           950  
+                           Optimizer.step#Adadelta.step         2.88%        1.143s        15.36%        6.104s       6.508ms        1.270s         3.25%        4.381s       4.671ms           938  
+                                           aten::conv2d         0.38%     149.409ms        10.92%        4.338s     767.974us      60.441ms         0.15%        8.528s       1.510ms          5648  
+                                      aten::convolution         0.52%     207.784ms        10.54%        4.188s     741.521us     119.096ms         0.30%        8.467s       1.499ms          5648  
+                                     aten::_convolution         0.58%     230.879ms        10.02%        3.980s     704.732us     109.148ms         0.28%        8.348s       1.478ms          5648  
+autograd::engine::evaluate_function: myConv2dFunctio...         0.25%     101.319ms         8.58%        3.411s       1.818ms      13.372ms         0.03%        5.443s       2.901ms          1876  
+                                aten::cudnn_convolution         5.87%        2.331s         8.53%        3.388s     599.875us        6.726s        17.19%        7.565s       1.339ms          5648  
+                            myConv2dFunctionCppBackward         0.39%     156.394ms         8.33%        3.310s       1.764ms     111.086ms         0.28%        5.429s       2.894ms          1876  
+                                            aten::zeros         6.37%        2.531s         6.86%        2.724s     963.513us     124.879ms         0.32%     206.870ms      73.177us          2827  
+                                    myConv2dFunctionCpp         0.35%     139.928ms         5.45%        2.167s       1.143ms      53.325ms         0.14%        3.721s       1.962ms          1896  
+    autograd::engine::evaluate_function: AddmmBackward0         0.34%     133.735ms         3.53%        1.401s     746.851us     158.236ms         0.40%        1.181s     629.474us          1876  
+                                             aten::mul_         3.28%        1.304s         3.28%        1.304s      57.909us     822.723ms         2.10%     822.723ms      36.546us         22512  
+                                            aten::zero_         1.41%     558.592ms         2.70%        1.072s      87.785us     456.452ms         1.17%     918.276ms      75.176us         12215  
+                                              aten::add         2.63%        1.046s         2.63%        1.046s      69.677us     538.887ms         1.38%     538.887ms      35.907us         15008  
+autograd::engine::evaluate_function: struct torch::a...         0.70%     277.125ms         2.62%        1.042s     138.802us     178.875ms         0.46%     666.544ms      88.825us          7504  
+                                        aten::transpose         1.38%     548.802ms         2.62%        1.039s      61.489us     337.740ms         0.86%     492.347ms      29.126us         16904  
+                                                aten::t         0.95%     378.427ms         2.61%        1.037s     110.366us     246.310ms         0.63%     616.752ms      65.612us          9400  
+                                         AddmmBackward0         0.28%     110.019ms         2.60%        1.033s     550.470us     166.141ms         0.42%     909.541ms     484.830us          1876  
+                                           aten::linear         0.16%      64.881ms         2.56%        1.017s     536.284us      45.090ms         0.12%     934.161ms     492.701us          1896  
 -------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
-Self CPU time total: 30.510s
-Self CUDA time total: 31.159s
+Self CPU time total: 39.735s
+Self CUDA time total: 39.123s
