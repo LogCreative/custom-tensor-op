@@ -169,7 +169,9 @@ def main():
         ProfilerActivity.CPU, ProfilerActivity.CUDA]) as prof: #
         with record_function("model_inference"):
             for epoch in range(1, args.epochs + 1):
+                # when training, it is enable_grad.
                 train(args, model, device, train_loader, optimizer, epoch)
+                # when testing, it is no_grad.
                 test(model, device, test_loader)
                 scheduler.step()
     if not os.path.exists("profiler/"):
