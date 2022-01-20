@@ -40,7 +40,7 @@ Conv2d 的运行情况
 
 <div style="font-size: small">*单次时间没有取平均，更加细致的时间分析将会采用下面的方法。</div>
 
-使用 [convperf](task3/convperf.py) 对卷积层的测试结果如下（5000次取平均）：
+使用 [convperf](task/convperf.py) 对卷积层的测试结果如下（5000次取平均）：
 
 |CPU 测试结果 |              Forward     |    Forward+Backward|
 |---|---|---|
@@ -68,7 +68,7 @@ Conv2d 的运行情况
 |--|--|
 | aten::cudnn_convolution_backward | 1876 |
 
-而是使用了内置的 cudnn_convolution_backward 实现，调用一次即可得到结果，可以猜测在数据并行性上有了较好的优化，可以直接输入一次数据，就可以执行两次等价时间的卷积运算，可以更好地提高硬件利用率。
+而是使用了内置的 cudnn_convolution_backward 实现，调用一次即可得到结果，猜测在数据并行性上有了较好的优化，直接输入一次数据，就执行两次等价时间的卷积运算，更好地提高硬件利用率。
 
 ## 卷积层原理
 
