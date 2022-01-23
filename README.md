@@ -70,6 +70,8 @@ Conv2d 的运行情况
 
 而是使用了内置的 cudnn_convolution_backward 实现，调用一次即可得到结果，猜测在数据并行性上有了较好的优化，直接输入一次数据，就执行两次等价时间的卷积运算，更好地提高硬件利用率。
 
+对于 CPU 优化而言，可以使用 TVM 对循环结构进行调整，减少数据依赖性，提高硬件利用率，提高 60% 左右的效率。细节详见 [LogCreative/CompilerPrinciple](https://github.com/LogCreative/CompilerPrinciple) 。
+
 ## 卷积层原理
 
 [Pytorch的API](https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d) 告诉我们
